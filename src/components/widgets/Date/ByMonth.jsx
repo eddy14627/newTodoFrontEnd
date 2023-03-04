@@ -6,6 +6,7 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { useDispatch } from "react-redux";
 import { setList } from "../../../state";
+import { url } from "../../../url";
 
 export default function ByMonth() {
   const [monthName, setMonthName] = React.useState("Month");
@@ -14,12 +15,9 @@ export default function ByMonth() {
   const handleChange = async (event) => {
     setMonthName(event.target.value);
     let month = event.target.value;
-    const response = await fetch(
-      `http://localhost:3001/months/month/${month}`,
-      {
-        method: "GET",
-      }
-    );
+    const response = await fetch(`${url}/months/month/${month}`, {
+      method: "GET",
+    });
     const data = await response.json();
     console.log(data);
     dispatch(setList(data));

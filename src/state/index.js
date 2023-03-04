@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { url } from "../url";
 
 export const taskManager = createAsyncThunk(
   "allTask/taskManager",
@@ -7,9 +8,7 @@ export const taskManager = createAsyncThunk(
     console.log(SendingData);
     console.log(act);
     const submitTask = await fetch(
-      act === "addTodo"
-        ? `http://localhost:3001`
-        : `http://localhost:3001/dateRange`,
+      act === "addTodo" ? `${url}` : `${url}/dateRange`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

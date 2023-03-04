@@ -6,6 +6,7 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { useDispatch } from "react-redux";
 import { setList } from "../../../state";
+import { url } from "../../../url";
 
 export default function ByYear() {
   const [year, setYear] = React.useState("Select By year");
@@ -14,12 +15,9 @@ export default function ByYear() {
   const handleChange = async (event) => {
     const selectedYear = event.target.value;
     setYear(selectedYear);
-    const response = await fetch(
-      `http://localhost:3001/years/year/${selectedYear}`,
-      {
-        method: "GET",
-      }
-    );
+    const response = await fetch(`${url}/years/year/${selectedYear}`, {
+      method: "GET",
+    });
     const data = await response.json();
     console.log(data);
     dispatch(setList(data));

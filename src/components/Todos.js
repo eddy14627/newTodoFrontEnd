@@ -18,6 +18,7 @@ import NewTask from "./widgets/NewTask";
 import Filter from "./widgets/Date/Filter";
 import AttachLink from "./widgets/AttachLink";
 import AttachPhotoLink from "./widgets/AttachPhotoLink";
+import { url } from "../url";
 
 let daysOfWeek = [
   "Sunday",
@@ -52,7 +53,7 @@ const Todos = () => {
   }, [arr]);
 
   const countTask = async () => {
-    const response = await fetch(`http://localhost:3001/countTask`, {
+    const response = await fetch(`${url}/countTask`, {
       method: "GET",
     });
     const data = await response.json();
@@ -60,7 +61,7 @@ const Todos = () => {
   };
 
   const fetchData = async () => {
-    const response = await fetch(`http://localhost:3001`, {
+    const response = await fetch(`${url}`, {
       method: "GET",
     });
     const data = await response.json();

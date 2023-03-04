@@ -12,6 +12,7 @@ import { useDispatch } from "react-redux";
 import { setList } from "../../state";
 import UserImage from "./UserImage";
 import { deepOrange } from "@mui/material/colors";
+import { url } from "../../url";
 
 let monthsOfYear = [
   "January",
@@ -45,12 +46,9 @@ export default function NewTask({
 
   const handleDelete = async () => {
     console.log("delete clicked");
-    const response = await fetch(
-      `http://localhost:3001/delete/taskId/${taskId}`,
-      {
-        method: "GET",
-      }
-    );
+    const response = await fetch(`${url}/delete/taskId/${taskId}`, {
+      method: "GET",
+    });
     const data = await response.json();
     dispatch(setList(data));
   };
