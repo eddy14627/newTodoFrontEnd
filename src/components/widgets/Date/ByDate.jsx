@@ -9,13 +9,14 @@ import { setList } from "../../../state";
 import { url } from "../../../url";
 
 export default function ByDate() {
-  let x = newValue.$d;
-  let numDay = newValue.$D;
   let date = new Date(x);
   let monthIndex = date.getMonth();
   let year = date.getFullYear();
-  let thisDay = `${numDay}-${monthIndex + 1}-${year}`;
+
   const [value, setValue] = React.useState(dayjs(date));
+  let x = value.$d;
+  let numDay = value.$D;
+  let thisDay = `${numDay}-${monthIndex + 1}-${year}`;
   const dispatch = useDispatch();
   const handleChange = async (newValue) => {
     setValue(newValue);
