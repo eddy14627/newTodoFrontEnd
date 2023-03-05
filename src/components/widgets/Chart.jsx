@@ -12,7 +12,7 @@ const Chart = ({ value }) => {
     const dd = d.getDate();
     dayArray.push(dd);
   }
-  console.log(dayArray);
+  // console.log(dayArray);
   temp = value.arr || [];
   const [data, setData] = useState(temp);
 
@@ -84,7 +84,7 @@ const Chart = ({ value }) => {
   return (
     <Box>
       <div>
-        <Card style={{ padding: "30px 30px", width: "60vh" }}>
+        <Card style={{ padding: "30px 30px", width: "100vh" }}>
           <Typography margin={"10px 0"} fontFamily={"cursive"} variant="h3">
             Chart
           </Typography>

@@ -8,7 +8,7 @@ export const taskManager = createAsyncThunk(
     console.log(SendingData);
     console.log(act);
     const submitTask = await fetch(
-      act === "addTodo" ? `${url}` : `${url}/dateRange`,
+      act === "addTodo" ? `${url}` : `${url}/dateRange/range`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -45,11 +45,9 @@ export const stateManagement = createSlice({
       state.link = actions.payload;
     },
     setPhotoLink: (state, actions) => {
-      console.log(actions);
       state.photo = actions.payload;
     },
     setCountTasks: (state, actions) => {
-      console.log(actions);
       state.arr = actions.payload;
     },
   },

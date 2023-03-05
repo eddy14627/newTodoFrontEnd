@@ -11,17 +11,17 @@ import { url } from "../../../url";
 export default function ByDate() {
   const [value, setValue] = React.useState(dayjs());
   const dispatch = useDispatch();
-
   const handleChange = async (newValue) => {
     setValue(newValue);
+    console.log(newValue);
+    let x = newValue.$d;
+    let numDay = newValue.$D;
+    let date = new Date(x);
+    let monthIndex = date.getMonth();
+    let month = monthIndex + 1;
+    let year = date.getFullYear();
 
-    const x = newValue.$d;
-    const numDay = newValue.$D;
-    const monthIndex = x.getMonth();
-    const year = x.getFullYear();
-    const thisDay = `${numDay}-${monthIndex + 1}-${year}`;
-
-    const response = await fetch(`${url}/date/${thisDay}`, {
+    const response = await fetch(`${url}/date/${numDay}/${month}/${year}`, {
       method: "GET",
     });
     const data = await response.json();

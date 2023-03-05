@@ -10,7 +10,6 @@ import {
   Typography,
 } from "@mui/material";
 import Chart from "./widgets/Chart";
-import DateTab from "./widgets/Date/DateTab";
 import { setCountTasks, setList, taskManager } from "../state";
 import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
 import AddLinkIcon from "@mui/icons-material/AddLink";
@@ -20,35 +19,24 @@ import AttachLink from "./widgets/AttachLink";
 import AttachPhotoLink from "./widgets/AttachPhotoLink";
 import { url } from "../url";
 
-let daysOfWeek = [
-  "Sunday",
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-];
 const Todos = () => {
   let today = new Date();
   const taskId = today;
   let year = today.getFullYear();
   let month = today.getMonth() + 1; // Add 1 because getMonth() returns a zero-based index
   let day = today.getDate();
-  let dayOfWeekName = daysOfWeek[today.getDay()];
-  const thisDaty = `${day}-${month}-${year}`;
 
   const dispatch = useDispatch();
   const [input, setInput] = useState("");
-  const [arrChange, setArrChange] = useState(false);
   const [openLink, setOpenLink] = useState(false);
   const [openPhotoLink, setOpenPhotoLink] = useState(false);
   const { drawer, tasks, link, photo, arr } = useSelector(
     (state) => state.reducer
   );
-  const format = "format";
   useEffect(() => {
     fetchData();
+  }, []);
+  useEffect(() => {
     countTask();
   }, [arr]);
 
@@ -84,7 +72,6 @@ const Todos = () => {
       year,
       task: input,
     };
-    console.log(SendingData);
     dispatch(taskManager(SendingData));
   };
 
@@ -113,10 +100,9 @@ const Todos = () => {
           marginBottom: "20px",
         }}
       >
-        <Chart format={format} value={arr} arrChange={arrChange} />
+        <Chart value={arr} />
       </Box>
       <Filter />
-      {/* <DateTab day={day} month={month} year={year} Day={dayOfWeekName} /> */}
       <Box>
         <Paper
           component="form"
