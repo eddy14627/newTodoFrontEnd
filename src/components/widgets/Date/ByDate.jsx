@@ -12,14 +12,15 @@ export default function ByDate() {
   const [value, setValue] = React.useState(dayjs());
   const dispatch = useDispatch();
   const handleChange = async (newValue) => {
+    let x, numDay, date, monthIndex, month, year;
     setValue(newValue);
     console.log(newValue);
-    let x = newValue.$d;
-    let numDay = newValue.$D;
-    let date = new Date(x);
-    let monthIndex = date.getMonth();
-    let month = monthIndex + 1;
-    let year = date.getFullYear();
+    x = newValue.$d;
+    numDay = newValue.$D;
+    date = new Date(x);
+    monthIndex = date.getMonth();
+    month = monthIndex + 1;
+    year = date.getFullYear();
 
     const response = await fetch(`${url}/date/${numDay}/${month}/${year}`, {
       method: "GET",
