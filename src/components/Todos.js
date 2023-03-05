@@ -10,6 +10,8 @@ import {
   Typography,
 } from "@mui/material";
 import Chart from "./widgets/Chart";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+
 import { setCountTasks, setList, taskManager } from "../state";
 import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
 import AddLinkIcon from "@mui/icons-material/AddLink";
@@ -36,6 +38,7 @@ const Todos = () => {
   useEffect(() => {
     fetchData();
   }, []);
+
   useEffect(() => {
     countTask();
   }, [arr]);
@@ -54,6 +57,14 @@ const Todos = () => {
     });
     const data = await response.json();
     dispatch(setList(data));
+  };
+
+  const handleDragEnd = (result) => {
+    if (!result.destination) return; // dropped outside the list
+    const items = Array.from(tasks);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+    dispatch(setList(items));
   };
 
   const handleChange = (e) => {
@@ -85,81 +96,109 @@ const Todos = () => {
   };
 
   return (
-    <Box
-      style={{
-        transition: "margin-left 0.2s",
-        marginLeft: drawer ? "240px" : "0",
-      }}
-      display="flex"
-      justifyContent="flex-start"
-      paddingLeft={20}
-      flexDirection="column"
-    >
+    <DragDropContext onDragEnd={(result) => handleDragEnd(result)}>
       <Box
         style={{
-          marginBottom: "20px",
+          transition: "margin-left 0.2s",
+          marginLeft: drawer ? "240px" : "0",
         }}
+        display="flex"
+        justifyContent="flex-start"
+        paddingLeft={20}
+        flexDirection="column"
       >
-        <Chart value={arr} />
-      </Box>
-      <Filter />
-      <Box>
-        <Paper
-          component="form"
-          sx={{
-            p: "2px 4px",
-            display: "flex",
-            alignItems: "center",
-            width: 400,
-            marginTop: "2px",
-            marginBottom: "2px",
+        <Box
+          style={{
+            marginBottom: "20px",
           }}
         >
-          <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
-            <AddIcon onClick={handleSubmit} />
-          </IconButton>
-          <InputBase
-            sx={{ ml: 1, flex: 1 }}
-            placeholder="add new task"
-            inputProps={{ "aria-label": "search google maps" }}
-            value={input}
-            onChange={handleChange}
-          />
-          <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-          <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
-            <InsertPhotoIcon onClick={handleAddPhoto} />
-          </IconButton>
-          <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-          <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
-            <AddLinkIcon onClick={handleAddLink} />
-          </IconButton>
-        </Paper>
-        {openLink && <AttachLink />}
-        {openPhotoLink && <AttachPhotoLink />}
+          <Chart value={arr} />
+        </Box>
+        <Filter />
+        <Box>
+          <Paper
+            component="form"
+            sx={{
+              p: "2px 4px",
+              display: "flex",
+              alignItems: "center",
+              width: 400,
+              marginTop: "2px",
+              marginBottom: "2px",
+            }}
+          >
+            <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
+              <AddIcon onClick={handleSubmit} />
+            </IconButton>
+            <InputBase
+              sx={{ ml: 1, flex: 1 }}
+              placeholder="add new task"
+              inputProps={{ "aria-label": "search google maps" }}
+              value={input}
+              onChange={handleChange}
+            />
+            <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
+            <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
+              <InsertPhotoIcon onClick={handleAddPhoto} />
+            </IconButton>
+            <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
+            <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
+              <AddLinkIcon onClick={handleAddLink} />
+            </IconButton>
+          </Paper>
+          {openLink && <AttachLink />}
+          {openPhotoLink && <AttachPhotoLink />}
+        </Box>
+        <Box>
+          {tasks.length === 0 ? (
+            <Typography>No tasks added yet</Typography>
+          ) : (
+            <Droppable droppableId="tasks">
+              {(provided) => (
+                <Box {...provided.droppableProps} ref={provided.innerRef}>
+                  {tasks.map(
+                    (
+                      {
+                        task,
+                        day,
+                        month,
+                        year,
+                        taskId,
+                        _id,
+                        link,
+                        picturePath,
+                      },
+                      index
+                    ) => (
+                      <Draggable key={_id} draggableId={_id} index={index}>
+                        {(provided) => (
+                          <Box
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            ref={provided.innerRef}
+                          >
+                            <NewTask
+                              task={task}
+                              link={link}
+                              picturePath={picturePath}
+                              day={day}
+                              month={month}
+                              year={year}
+                              taskId={taskId}
+                            />
+                          </Box>
+                        )}
+                      </Draggable>
+                    )
+                  )}
+                  {provided.placeholder}
+                </Box>
+              )}
+            </Droppable>
+          )}
+        </Box>
       </Box>
-      <Box>
-        {tasks.length === 0 ? (
-          <Typography>No tasks added yet</Typography>
-        ) : (
-          tasks.map(
-            ({ task, day, month, year, taskId, _id, link, picturePath }) => {
-              return (
-                <NewTask
-                  key={_id}
-                  task={task}
-                  link={link}
-                  picturePath={picturePath}
-                  day={day}
-                  month={month}
-                  year={year}
-                  taskId={taskId}
-                />
-              );
-            }
-          )
-        )}
-      </Box>
-    </Box>
+    </DragDropContext>
   );
 };
 
